@@ -109,12 +109,10 @@ class Collator:
         self.processor = processor
 
     def __call__(self, features: "list[dict[str, np.ndarray]]"):
-        # features = [{"audio": np.array, "text": str}, ...]
         features = [
             self.processor(audio=x["audio"], sampling_rate=16000, text=x["text"])
             for x in features
         ]
-        # features = [{"input_values": np.array, "labels": np.array}, ...]
         input_features = [{"input_values": x["input_values"][0]} for x in features]
         labels = [{"input_ids": x["labels"]} for x in features]
 
@@ -159,14 +157,7 @@ def main():
     parser.add_argument("--do_masking", action="store_true")
     parser.add_argument("--max_mask_len", type=int, default=3200)
     parser.add_argument("--batch_size", type=int, default=2)
-#     parser.add_argument("--max_steps", type=int, default=300000)
-#     parser.add_argument("--save_steps", type=int, default=1000)
-#     parser.add_argument("--save_total_limit", type=int, default=5)
-#     parser.add_argument("--eval_steps", type=int, default=1000)
-#     parser.add_argument("--logging_steps", type=int, default=100)
-#     parser.add_argument("--learning_rate", type=float, default=1e-5)
-#     parser.add_argument("--warmup_steps", type=int, default=1000)
-    parser.add_argument("--max_steps", type=int, default=30000)
+    parser.add_argument("--max_steps", type=int, default=300000)
     parser.add_argument("--save_steps", type=int, default=100)
     parser.add_argument("--save_total_limit", type=int, default=5)
     parser.add_argument("--eval_steps", type=int, default=100)
@@ -185,18 +176,15 @@ def main():
     )
 
     tokenizer = Wav2Vec2CTCTokenizer(vocab_file="vocab.json", word_delimiter_token=" ")
-    # feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(args.base_model)
-    feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained('/ocean/projects/cis220031p/ybogale/output/checkpoint-7900')
+    feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(args.base_model)
 
     processor = Wav2Vec2Processor(
         feature_extractor=feature_extractor, tokenizer=tokenizer
     )
-    # model = Wav2Vec2ForCTC.from_pretrained(
-    #     args.base_model, vocab_size=tokenizer.vocab_size, ctc_loss_reduction="mean"
-    # )
     model = Wav2Vec2ForCTC.from_pretrained(
-        '/ocean/projects/cis220031p/ybogale/output/checkpoint-7900', vocab_size=tokenizer.vocab_size, ctc_loss_reduction="mean"
+        args.base_model, vocab_size=tokenizer.vocab_size, ctc_loss_reduction="mean"
     )
+
     # model.freeze_feature_encoder()
     print(model)
     
