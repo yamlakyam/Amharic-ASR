@@ -5,7 +5,7 @@ This repository contains code for training an Automatic Speech Recognition (ASR)
 The dataset used for training and evaluation should be organized in a specific directory structure. The audio files should be stored in separate directories for training and validation sets. The path to these directories should be specified in the code.
 
 **Training:**
-To train the ASR system, run the `main.py` script. You can specify various training parameters such as batch size, learning rate, and augmentation techniques using command-line arguments.
+To train the ASR system, run the `Amharic ASR.py` script. You can specify various training parameters such as batch size, learning rate, and augmentation techniques using command-line arguments.
 
 
 **Evaluation:**
